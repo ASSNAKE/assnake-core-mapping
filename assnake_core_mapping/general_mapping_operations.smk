@@ -2,11 +2,11 @@ fna_db_dir= config['fna_db_dir']
 
 rule init_bam_mapped:
     input:
-        sam = '{fs_prefix}/{df}/mapped/bwa__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.sam'
+        sam = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.sam'
     output:
-        bam = '{fs_prefix}/{df}/mapped/bwa__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
+        bam = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
     params:
-        tmp = '{fs_prefix}/{df}/mapped/bwa__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.tmp.bam'
+        tmp = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.tmp.bam'
     conda: './bwa/env_0.7.17.yaml'
     shell: 
         '''echo "{input.sam}";\n
@@ -16,8 +16,8 @@ rule init_bam_mapped:
         rm {params.tmp}'''
 
 rule samtools_flagstat:
-    input: bam = '{fs_prefix}/{df}/mapped/bwa__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
-    output: flagstat = '{fs_prefix}/{df}/mapped/bwa__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.flagstat.txt'
+    input:  bam      = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
+    output: flagstat = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.flagstat.txt'
     conda: './bwa/env_0.7.17.yaml'
     shell: 'samtools flagstat {input.bam} > {output.flagstat}'
 
