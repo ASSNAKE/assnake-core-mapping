@@ -17,15 +17,7 @@ def bwa_params(params_loc):
 
 param_str = tmtic_params(snakemake.input.params)
         
-shell('''trimmomatic PE -phred33 \
-                 -threads {snakemake.threads} \
-                 {snakemake.input.first} {snakemake.input.second} \
-                 {snakemake.output.r1} {snakemake.params.u1} \
-                 {snakemake.output.r2} {snakemake.params.u2} \
-                 {param_str} \
-         >{snakemake.log} 2>&1 && \
-         cat {snakemake.params.u1} {snakemake.params.u2} | gzip > {snakemake.output.u} 2>>{snakemake.log} && \
-         rm {snakemake.params.u1} {snakemake.params.u2} 2>>{snakemake.log}''')
+shell('''(bwa mem -M -t {threads} {params.ind_prefix} {input.r1} {input.r2} > {output.sam}) >{log} 2>&1''')
 
 if 'task_id' in snakemake.config.keys():
     save_to_db(config['task_id'], 'tmtic', str(input), str(log), 'RUN SUCCESSFUL')

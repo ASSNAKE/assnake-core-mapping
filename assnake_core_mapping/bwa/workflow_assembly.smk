@@ -35,7 +35,7 @@ rule map_on_assembly_bwa:
         r2 = wc_config['fastq_gz_R2_wc'],
         ref_fasta = os.path.join(config['bwa_index_dir'], 'assembly/{assembler}__{assembler_version}__{params}/{ass_df}/{sample_set}/final_contigs__{mod}/index.sa')
     output:
-        sam   = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{assembler}__{assembler_version}__{params}/{ass_df}/{sample_set}/final_contigs__{mod}/{sample}/{preproc}/mapped.sam'
+        sam   = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{assembler}__{assembler_version}__{params}/{ass_df}/{sample_set}/final_contigs__{mod}/{sample}/{preproc}/{sample}.sam'
     params:
         ind_prefix = os.path.join(config['bwa_index_dir'], 'assembly/{assembler}__{assembler_version}__{params}/{ass_df}/{sample_set}/final_contigs__{mod}/index')
     log:      '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{assembler}__{assembler_version}__{params}/{ass_df}/{sample_set}/final_contigs__{mod}/{sample}/{preproc}/log.txt'
