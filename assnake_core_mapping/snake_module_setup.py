@@ -11,6 +11,7 @@ snake_module = SnakeModule(name = 'assnake-core-mapping',
                            install_dir = this_dir,
                            snakefiles = [
                                './bwa/workflow_fasta_from_db.smk', 
+                               './bwa/workflow_assembly.smk', 
                                './general_mapping_operations.smk',
                                './bowtie2/workflow.smk'
                             ],
