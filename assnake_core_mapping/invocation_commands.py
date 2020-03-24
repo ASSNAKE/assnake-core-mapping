@@ -6,7 +6,7 @@ from assnake.cli.cli_utils import sample_set_construction_options, add_options, 
 import os, datetime 
 import pandas as pd 
 
-@click.command('map-bwa-mem', short_help='Map your samples on genome using BWA MEM')
+@click.command('bbmap-coverage-stats', short_help='Map your samples on genome using BWA MEM')
 @add_options(sample_set_construction_options)
 @click.option('--reference', 
                 help='Reference to use', 
@@ -24,7 +24,7 @@ def map_bwa(config, reference, params, version, **kwargs):
 
     for s in sample_set.samples_pd.to_dict(orient='records'):
         preprocessing = s['preproc']
-        res_list.append( '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{reference}/{sample}/{preproc}/{sample}.bb_stats'.format(
+        res_list.append( '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{reference}/{sample}/{preproc}/{sample}.bam'.format(
             fs_prefix = s['fs_prefix'].rstrip('\/'),
             df = s['df'],
             preproc = preprocessing,

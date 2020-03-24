@@ -1,9 +1,9 @@
 index_dir = config['bwa_index_dir']
 
 def get_ref_fasta(wildcards):
-    ddf = assnake.api.dataset.Dataset(wildcards.ass_df)
+    ddf = assnake.Dataset(wildcards.ass_df)
     # print(ddf)
-    fs_prefix = assnake.api.dataset.Dataset(wildcards.ass_df).fs_prefix
+    fs_prefix = assnake.Dataset(wildcards.ass_df).fs_prefix
     final_contigs_wc = '{fs_prefix}/{df}/assembly/{sample_set}/{assembler}__{assembler_version}__{params}/final_contigs__{mod}.fa'
 
     return final_contigs_wc.format(
@@ -27,6 +27,9 @@ rule create_assembly_index_bwa:
         prefix    = os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/index')
     log:            os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/log.txt')
     benchmark:      os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/benchmark.txt')
+    wildcard_constraints:    
+        df="[\w\d_-]+",
+        params="[\w\d_-]+"
     conda: 'env_0.7.17.yaml'
     shell: ('''bwa index -p {params.prefix} -a bwtsw {input.ref} > {log} 2>&1;''')
 

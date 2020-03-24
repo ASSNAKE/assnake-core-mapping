@@ -9,16 +9,20 @@ import yaml
 
 
 ####------DATA LOADERS------####
-def get_cov_stats(prefix, df, samples, tool, preproc, seq_set_path, seq_set_id):
-    bb_stats_wc = '{prefix}/{df}/mapped/{tool}__{params}/{path}/{seq_set_id}/{{sample}}/{preproc}/mapped.bb_stats'
+def get_cov_stats(fs_prefix, df, samples, preproc, reference, mapper = 'bwa', params = 'def', version = '0.7.17'):
+    bb_stats_wc = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{reference}/{{sample}}/{preproc}/{{sample}}.bb_stats'
+    # bb_stats_wc = '{prefix}/{df}/mapped/{tool}__{params}/{path}/{seq_set_id}/{{sample}}/{preproc}/mapped.bb_stats'
     bb_stats_loc = bb_stats_wc.format(
-        prefix=prefix,
+
+        fs_prefix=fs_prefix,
         df = df,
         preproc=preproc,
-        tool = tool,
-        params = 'def1',
-        path = seq_set_path,
-        seq_set_id = seq_set_id
+
+        reference = reference, 
+
+        mapper = mapper,
+        version = version,
+        params = 'def'
     )
 
     return load_cov_stats(samples, bb_stats_loc)

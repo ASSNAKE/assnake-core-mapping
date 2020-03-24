@@ -1,3 +1,34 @@
+def get_assembly_fasta(wildcards):
+    ddf = assnake.Dataset(wildcards.ass_df)
+    # print(ddf)
+    fs_prefix = assnake.Dataset(wildcards.ass_df).fs_prefix
+    final_contigs_wc = '{fs_prefix}/{df}/assembly/{sample_set}/{assembler}__{assembler_version}__{params}/final_contigs__{mod}.fa'
+
+    return final_contigs_wc.format(
+            fs_prefix = fs_prefix, 
+            df = wildcards.ass_df,
+            sample_set = wildcards.sample_set,
+            mod = wildcards.mod,
+            params = 'def',
+            assembler = wildcards.assembler,
+            assembler_version = wildcards.assembler_version,
+            assembler_params = wildcards.assembler_params
+            )
+
+rule bbstats_coverage_assembly:
+    input:
+        bam = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{sample}/{preproc}/{sample}.bam',
+        ref = get_assembly_fasta
+    output:
+        stats = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{sample}/{preproc}/{sample}.bb_stats'
+    wildcard_constraints:    
+        df="[\w\d_-]+",
+        params="[\w\d_-]+"
+    log: '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{sample}/{preproc}/mapped_bb_stats_log.txt'
+    conda: './bbmap/bbmap_env.yaml'
+    shell: ('''pileup.sh ref={input.ref} in={input.bam} out={output.stats} >{log} 2>&1 \n
+    cat {log}''')
+
 fna_db_dir= config['fna_db_dir']
 
 # rule init_bam_mapped:
