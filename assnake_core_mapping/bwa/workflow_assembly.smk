@@ -40,11 +40,11 @@ rule map_on_assembly_bwa:
         r2 = wc_config['fastq_gz_R2_wc'],
         ref_fasta = os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/index.sa')
     output:
-        sam   = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{sample}/{preproc}/{sample}.bam'
+        sam   = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{fs_name}/{preproc}/{fs_name}.bam'
     params:
         ind_prefix = os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/index')
-    log:        '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{sample}/{preproc}/log.txt'
-    benchmark:  '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{sample}/{preproc}/benchmark.txt'
+    log:        '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{fs_name}/{preproc}/log.txt'
+    benchmark:  '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{fs_name}/{preproc}/benchmark.txt'
     wildcard_constraints:    
         df="[\w\d_-]+",
         params="[\w\d_-]+"

@@ -2,7 +2,8 @@ import assnake.api.loaders
 import assnake
 from tabulate import tabulate
 import click
-from assnake.cli.cli_utils import sample_set_construction_options, add_options, generic_command_individual_samples, generate_result_list
+from assnake.core.sample_set import generic_command_individual_samples, generate_result_list
+from assnake.cli.cli_utils import sample_set_construction_options, add_options
 import os, datetime 
 import pandas as pd 
 
