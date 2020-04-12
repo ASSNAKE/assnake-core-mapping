@@ -1,0 +1,7 @@
+use_single_reads: true
+as_single: true
+preset: 'very-sensitive'
+no-unal: false
+no-hd: true
+no-sq: true
+sam-no-qname-trunc: true
