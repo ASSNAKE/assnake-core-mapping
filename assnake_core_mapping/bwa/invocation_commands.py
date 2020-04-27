@@ -23,13 +23,13 @@ def map_bwa(config, reference, params, version, **kwargs):
 
     res_list = []
 
-    for s in sample_set.samples_pd.to_dict(orient='records'):
+    for s in sample_set.to_dict(orient='records'):
         preprocessing = s['preproc']
-        res_list.append( '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{reference}/{sample}/{preproc}/{sample}.bb_stats'.format(
+        res_list.append( '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{reference}/{df_sample}/{preproc}/{df_sample}.bb_stats'.format(
             fs_prefix = s['fs_prefix'].rstrip('\/'),
             df = s['df'],
             preproc = preprocessing,
-            sample = s['fs_name'],
+            df_sample = s['df_sample'],
             reference = reference,
             params = params,
             version = version

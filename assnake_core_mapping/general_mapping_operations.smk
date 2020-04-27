@@ -30,21 +30,36 @@ rule bbstats_coverage_assembly:
     cat {log}''')
 
 fna_db_dir= config['fna_db_dir']
+rule bbstats_coverage_from_db:
+    input:
+        bam = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{path}/{seq_set_id}/{df_sample}/{preproc}/{df_sample}.bam',
+        ref = os.path.join(fna_db_dir, '{path}/{seq_set_id}.fna')
+    output:
+        stats = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{path}/{seq_set_id}/{df_sample}/{preproc}/{df_sample}.bb_stats'
+    wildcard_constraints:    
+        df="[\w\d_-]+",
+        params="[\w\d_-]+"
+    log: '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{path}/{seq_set_id}/{df_sample}/{preproc}/mapped_bb_stats_log.txt'
+    conda: './bbmap/bbmap_env.yaml'
+    shell: ('''pileup.sh ref={input.ref} in={input.bam} out={output.stats} >{log} 2>&1 \n
+    cat {log}''')
 
-# rule init_bam_mapped:
-#     input:
-#         sam = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.sam'
-#     output:
-#         bam = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
-#     params:
-#         tmp = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.tmp.bam'
-#     conda: './bwa/env_0.7.17.yaml'
-#     shell: 
-#         '''echo "{input.sam}";\n
-#         samtools view -bS {input.sam} -o {params.tmp};\n
-#         samtools sort {params.tmp} -o {output.bam};\n
-#         samtools index {output.bam};\n
-#         rm {params.tmp}'''
+
+rule init_bam_mapped:
+    input:
+        sam = '{fs_prefix}/{df}/mapped/{mapper}__{version}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.sam'
+    output:
+        bam = '{fs_prefix}/{df}/mapped/{mapper}__{version}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
+    params:
+        tmp = '{fs_prefix}/{df}/mapped/{mapper}__{version}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.tmp.bam'
+    conda: './bwa/env_0.7.17.yaml'
+    threads: 10
+    shell: 
+        '''echo "{input.sam}";\n
+        samtools view -bS {input.sam} -o {params.tmp};\n
+        samtools sort {params.tmp} -o {output.bam} -@ {threads};\n
+        samtools index {output.bam};\n
+        rm {params.tmp}'''
 
 rule samtools_flagstat:
     input:  bam      = '{fs_prefix}/{df}/mapped/{mapper}__{params}/{path}/{seq_set_id}/{sample}/{preproc}/{sample}.bam'
