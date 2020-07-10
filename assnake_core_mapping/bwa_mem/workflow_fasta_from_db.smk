@@ -13,9 +13,7 @@ rule create_seq_set_index_bwa:
     log:            os.path.join(index_dir, 'bwa/{path}/{seq_set_id}/log.txt')
     benchmark:      os.path.join(index_dir, 'bwa/{path}/{seq_set_id}/benchmark.txt')
     conda: 'env_0.7.17.yaml'
-    shell: ('''echo -e "INFO: Creating BWA index for {input.ref}"; \n
-         bwa index -p {params.prefix} -a bwtsw {input.ref} > {log} 2>&1; \n
-         echo -e "INFO: Finished creating BWA index for {input.ref}\n"''')
+    shell: ('''bwa index -p {params.prefix} -a bwtsw {input.ref} > {log} 2>&1''')
         
 
 rule map_on_ref_bwa:

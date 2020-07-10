@@ -1,0 +1,1 @@
+bwa-mem_wc: '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/{path}/{seq_set_id}/{df_sample}/{preproc}/{df_sample}.sam'
