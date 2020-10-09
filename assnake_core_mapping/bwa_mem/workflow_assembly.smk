@@ -4,14 +4,14 @@ def get_ref_fasta(wildcards):
     ddf = assnake.Dataset(wildcards.ass_df)
     # print(ddf)
     fs_prefix = assnake.Dataset(wildcards.ass_df).fs_prefix
-    final_contigs_wc = '{fs_prefix}/{df}/assembly/{sample_set}/{assembler}__{assembler_version}__{params}/final_contigs__{mod}.fa'
+    final_contigs_wc = '{fs_prefix}/{df}/assembly/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}.fa'
 
     return final_contigs_wc.format(
             fs_prefix = fs_prefix, 
             df = wildcards.ass_df,
             sample_set = wildcards.sample_set,
             mod = wildcards.mod,
-            params = 'def',
+            # params = 'def',
             assembler = wildcards.assembler,
             assembler_version = wildcards.assembler_version,
             assembler_params = wildcards.assembler_params
@@ -40,14 +40,14 @@ rule map_on_assembly_bwa:
         r2 = wc_config['fastq_gz_R2_wc'],
         ref_fasta = os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/index.sa')
     output:
-        sam   = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{fs_name}/{preproc}/{fs_name}.bam'
+        sam   = '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{df_sample}/{preproc}/{df_sample}.bam'
     params:
         ind_prefix = os.path.join(index_dir, 'assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/index')
-    log:        '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{fs_name}/{preproc}/log.txt'
-    benchmark:  '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{fs_name}/{preproc}/benchmark.txt'
+    log:        '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{df_sample}/{preproc}/log.txt'
+    benchmark:  '{fs_prefix}/{df}/mapped/bwa__{version}__{params}/assembly/{ass_df}/{sample_set}/{assembler}__{assembler_version}__{assembler_params}/final_contigs__{mod}/{df_sample}/{preproc}/benchmark.txt'
     wildcard_constraints:    
         df="[\w\d_-]+",
         params="[\w\d_-]+"
     conda: 'env_0.7.17.yaml'
-    threads: 12
+    threads: 10
     shell: ('(bwa mem -M -t {threads} {params.ind_prefix} {input.r1} {input.r2} | samtools sort -@{threads} -o {output.sam} - ) >{log} 2>&1')
